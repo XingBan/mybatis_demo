@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mybatis_demo.mybatis_annotation.dao.GoodsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.example.mybatis_demo.mybatis_annotation.entity.Goods">
+        <result column="id" property="id" />
+        <result column="description" property="description" />
+        <result column="price" property="price" />
+        <result column="categoryid" property="categoryid" />
+        <result column="yardage" property="yardage"/>
+        <result column="front_img_url" property="frontImgUrl" />
+        <result column="behind_img_url" property="behindImgUrl" />
+        <result column="side_img_url" property="sideImgUrl" />
+        <result column="above_img_url" property="aboveImgUrl" />
+        <result column="below_img_url" property="belowImgUrl"/>
+        <result column="title" property="title" />
+        <result column="sort" property="sort" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="isshow" property="isshow"/>
+        <result column="groupid" property="groupid"/>
+    </resultMap>
+    <sql id="field">
+        id,
+        description,
+        price,
+        categoryid,
+        yardage,
+        front_img_url,
+        behind_img_url,
+        side_img_url,
+        above_img_url,
+        below_img_url,
+        title,
+        sort,
+        create_time,
+        update_time,
+        isshow,
+        groupid
+    </sql>
+
+
+    <select id="selectGoodsPage" resultMap="BaseResultMap">
+      SELECT
+        <include refid="field"/>
+      FROM
+        goods
+      WHERE 1=1
+      <if test="null != title and '' != title">
+          AND title LIKE CONCAT('%',#{title},'%')
+      </if>
+      <if test="null != categoryid and '' != categoryid">
+          AND categoryid  = #{categoryid}
+      </if>
+        ORDER BY id
+    </select>
+
+    <select id="findGoodsById" resultMap="BaseResultMap">
+        SELECT
+          <include refid="field"/>
+        FROM
+          goods
+        WHERE
+          id = #{id}
+    </select>
+
+    <update id="updateGoods">
+        UPDATE goods
+        <trim prefix="set" suffixOverrides=",">
+            <if test=" description != null"> description=#{description},</if>
+            <if test=" price != null"> price=#{price},</if>
+            <if test=" categoryid != null"> categoryid=#{categoryid},</if>
+            <if test=" yardage != null"> yardage=#{yardage},</if>
+            <if test=" frontImgUrl != null"> front_img_url=#{frontImgUrl},</if>
+            <if test=" behindImgUrl != null"> behind_img_url=#{behindImgUrl},</if>
+            <if test=" sideImgUrl != null"> side_img_url=#{sideImgUrl},</if>
+            <if test=" aboveImgUrl != null"> above_img_url=#{aboveImgUrl},</if>
+            <if test=" belowImgUrl != null"> below_img_url=#{belowImgUrl},</if>
+            <if test=" title != null"> title=#{title},</if>
+            <if test=" sort != null"> sort=#{sort},</if>
+            <if test=" createTime != null"> create_time=#{createTime},</if>
+            <if test=" updateTime != null"> update_time=#{updateTime},</if>
+            <if test=" isshow != null"> isshow=#{isshow},</if>
+            <if test=" groupid != null"> groupid=#{groupid},</if>
+        </trim>
+    </update>
+
+    <select id="getMaxSort" resultMap="BaseResultMap">
+        SELECT max(sort) sort
+        from goods
+        WHERE  1=1
+        <if test="null !=groupid and ''!=groupid">
+            AND  groupid=#{groupid}
+        </if>
+
+
+    </select>
+
+    <insert id="insertGoods" useGeneratedKeys="true" keyProperty="id" parameterType="map">
+        INSERT  INTO  goods
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="description != null">
+                description,
+            </if>
+            <if test="price != null">
+                price,
+            </if>
+            <if test="categoryid != null">
+                categoryid,
+            </if>
+            <if test="yardage != null">
+                yardage,
+            </if>
+            <if test="frontImgUrl != null">
+                front_img_url,
+            </if>
+            <if test="behindImgUrl != null">
+                behind_img_url,
+            </if>
+            <if test="aboveImgUrl != null">
+                above_img_url,
+            </if>
+            <if test="belowImgUrl != null">
+                below_img_url,
+            </if>
+            <if test="title != null">
+                title,
+            </if>
+            <if test="sort != null">
+                sort,
+            </if>
+            <if test="isshow != null">
+                isshow,
+            </if>
+            <if test="groupid != null">
+                groupid,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id},
+            </if>
+            <if test="description != null">
+                #{description},
+            </if>
+            <if test="price != null">
+                #{price},
+            </if>
+            <if test="categoryid != null">
+                #{categoryid},
+            </if>
+            <if test="yardage != null">
+                #{yardage},
+            </if>
+            <if test="frontImgUrl != null">
+                #{frontImgUrl},
+            </if>
+            <if test="behindImgUrl != null">
+                #{behindImgUrl},
+            </if>
+            <if test="aboveImgUrl != null">
+                #{aboveImgUrl},
+            </if>
+            <if test="belowImgUrl != null">
+                #{belowImgUrl},
+            </if>
+            <if test="title != null">
+                #{title},
+            </if>
+            <if test="sort != null">
+                #{sort},
+            </if>
+            <if test="isshow != null">
+                #{isshow},
+            </if>
+            <if test="groupid != null">
+                #{groupid},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime},
+            </if>
+        </trim>
+    </insert>
+
+
+</mapper>

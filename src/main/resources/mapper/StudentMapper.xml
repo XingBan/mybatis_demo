@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mybatis_demo.mybatis_annotation.dao.StudentMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.example.mybatis_demo.mybatis_annotation.entity.Student">
+        <result column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="sex" property="sex" />
+        <result column="description" property="description" />
+        <result column="status" property="status"/>
+    </resultMap>
+
+
+    <select id="getAll" resultMap="BaseResultMap">
+        SELECT
+        *
+        FROM
+        student
+        where status = '0'
+        <if test="null!=name and ''!=name">
+           AND name = #{name}
+        </if>
+        <if test="null!=sex and ''!=sex">
+            AND sex = #{sex}
+        </if>
+    </select>
+    <update id="updateStudentStutasById">
+        UPDATE student
+        set status='1'
+        WHERE  id= #{id}
+    </update>
+    <select id="findById" resultMap="BaseResultMap">
+      SELECT
+        *
+      FROM
+        student
+      WHERE
+        id = #{id}
+    </select>
+    <update id="updateStudentById">
+        /*
+          动态sql拼接
+          trim就是为了删除最后的字段“，”的
+          主要不用单独写set，因为社团被包含在trim中了
+        */
+
+        UPDATE  student
+        <trim prefix="set" suffixOverrides=",">
+            <if test="name!=null">name=#{name},</if>
+            <if test="sex!=null">sex=#{sex},</if>
+            <if test="description!=null">description=#{description},</if>
+        </trim>
+        WHERE id=#{id}
+    </update>
+
+
+
+</mapper>

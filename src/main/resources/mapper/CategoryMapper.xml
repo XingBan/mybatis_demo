@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mybatis_demo.mybatis_annotation.dao.CategoryMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.example.mybatis_demo.mybatis_annotation.entity.Category">
+        <result column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="identification" property="identification" />
+        <result column="queryfield" property="queryfield" />
+        <result column="editfield" property="editfield"/>
+        <result column="addfield" property="addfield" />
+        <result column="status" property="status" />
+        <result column="createTime" property="createTime" />
+        <result column="updateTime" property="updateTime" />
+    </resultMap>
+    <sql id="field">
+        id,
+        name,
+        identification,
+        queryfield,
+        editfield,
+        addfield,
+        status,
+        create_time,
+        update_time
+    </sql>
+
+    <select id="selectCategoryPage" resultMap="BaseResultMap">
+        SELECT
+        <include refid="field"/>
+        FROM
+        category
+        WHERE 1=1
+        <if test="null != categoryid and '' != categoryid">
+            AND categoryid  = #{categoryid}
+        </if>
+        <if test="null != identification and '' != identification">
+            AND identification  = #{identification}
+        </if>
+        ORDER BY id
+    </select>
+
+
+
+    <select id="findCategoryById" resultMap="BaseResultMap">
+        SELECT
+        <include refid="field"/>
+        FROM
+        category
+        WHERE
+        id = #{id}
+    </select>
+
+    <update id="updateCategory">
+        UPDATE category
+        <trim prefix="set" suffixOverrides=",">
+            <if test="  name != null"> name=#{name},</if>
+            <if test=" identification != null"> identification=#{identification},</if>
+            <if test=" queryfield != null"> queryfield=#{queryfield},</if>
+            <if test=" editfield != null"> editfield=#{editfield},</if>
+            <if test=" addfield != null"> addfield=#{addfield},</if>
+            <if test=" status != null"> status=#{status},</if>
+            <if test=" createTime != null"> create_time=#{createTime},</if>
+            <if test=" updateTime != null"> update_time=#{updateTime},</if>
+        </trim>
+    </update>
+
+    <!--<insert id="insertCategory" useGeneratedKeys="true" keyProperty="id" parameterType="map">
+        INSERT  INTO  category(
+        name,
+        identification,
+        queryfield,
+        editfield,
+        addfield,
+        status,
+        create_time,
+        update_time
+        )
+        VALUES (
+          #{  name  } ,
+          #{  identification  } ,
+          #{  queryfield  } ,
+          #{  editfield  },
+          #{  addfield  },
+          #{  status  } ,
+          #{  createTime  } ,
+          #{  updateTime  }
+        )
+    </insert>-->
+
+    <insert id="insertCategory" useGeneratedKeys="true" keyProperty="id" parameterType="map">
+        INSERT  INTO  category
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="identification != null">
+                identification,
+            </if>
+            <if test="queryfield != null">
+                queryfield,
+            </if>
+            <if test="editfield != null">
+                editfield,
+            </if>
+            <if test="addfield != null">
+                addfield,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id},
+            </if>
+            <if test="name != null">
+                #{name},
+            </if>
+            <if test="identification != null">
+                #{identification},
+            </if>
+            <if test="queryfield != null">
+                #{queryfield},
+            </if>
+            <if test="editfield != null">
+                #{editfield},
+            </if>
+            <if test="addfield != null">
+                #{addfield},
+            </if>
+            <if test="status != null">
+                #{status},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime},
+            </if>
+        </trim>
+    </insert>
+
+</mapper>

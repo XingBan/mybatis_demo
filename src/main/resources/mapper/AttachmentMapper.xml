@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mybatis_demo.mybatis_annotation.dao.AttachmentMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.example.mybatis_demo.mybatis_annotation.entity.Attachment">
+        <result column="attachment_id" property="attachmentId" />
+        <result column="attachment_type" property="attachmentType" />
+        <result column="file_name" property="fileName" />
+        <result column="file_path" property="filePath" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+    <sql id="field">
+        attachment_id,
+        attachment_type,
+        file_name,
+        file_path,
+        create_time,
+        update_time
+    </sql>
+
+
+    <select id="selectAttachmentPage" resultMap="BaseResultMap">
+      SELECT
+        <include refid="field"/>
+      FROM
+        attachment
+      WHERE 1=1
+      <if test="null != fileName and '' != fileName">
+          AND file_name LIKE CONCAT('%',#{fileName},'%')
+      </if>
+        ORDER BY id
+    </select>
+
+    <select id="findByAttachment" resultMap="BaseResultMap">
+        SELECT
+          <include refid="field"/>
+        FROM
+          attachment
+        WHERE
+          id = #{id}
+    </select>
+
+    <update id="updateAttachment">
+        UPDATE attachment
+        <trim prefix="set" suffixOverrides=",">
+            <if test=" attachmentId != null"> attachment_id=#{attachmentId},</if>
+            <if test=" attachmentType != null"> attachment_type=#{attachmentType},</if>
+            <if test=" fileName != null"> file_name=#{fileName},</if>
+            <if test=" filePath != null"> file_path=#{filePath},</if>
+            <if test=" createTime != null"> create_time=#{createTime},</if>
+            <if test=" updateTime != null"> update_time=#{updateTime},</if>
+        </trim>
+    </update>
+
+
+
+    <insert id="insertAttachment" useGeneratedKeys="true" keyProperty="id" parameterType="map">
+        INSERT  INTO  attachment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test=" attachmentId != null"> attachment_id,</if>
+            <if test=" attachmentType != null"> attachment_type,</if>
+            <if test=" fileName != null"> file_name,</if>
+            <if test=" filePath != null"> file_path,</if>
+            <if test=" createTime != null"> create_time,</if>
+            <if test=" updateTime != null"> update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test=" attachmentId != null"> attachment_id=#{attachmentId},</if>
+            <if test=" attachmentType != null"> attachment_type=#{attachmentType},</if>
+            <if test=" fileName != null"> file_name=#{fileName},</if>
+            <if test=" filePath != null"> file_path=#{filePath},</if>
+            <if test=" createTime != null"> create_time=#{createTime},</if>
+            <if test=" updateTime != null"> update_time=#{updateTime},</if>
+        </trim>
+    </insert>
+
+
+</mapper>
